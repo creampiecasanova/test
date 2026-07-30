@@ -25,6 +25,8 @@ function init() {
   camera.position.set(0, 1, 3);
 
   // Renderer (using canvas directly)
+  console.log("Canvas size:", canvas.clientWidth, canvas.clientHeight);
+  
   renderer = new THREE.WebGLRenderer({
     canvas: canvas,
     antialias: true
