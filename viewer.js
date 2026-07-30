@@ -32,7 +32,7 @@ function init() {
     antialias: true
   });
 
-  renderer.setClearColor(0xff00ff, 1); // ⭐ MAGENTA TEST
+  renderer.setClearColor(0x222222, 1); // dark gray background
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
