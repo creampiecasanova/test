@@ -5,8 +5,11 @@ import { OrbitControls } from "https://unpkg.com/three@0.160.0/examples/jsm/cont
 // Your GLB file
 const modelURL = "https://dl.dropboxusercontent.com/scl/fi/4zdgrxhnbv79g0d787hg6/camtamiya.glb?rlkey=q1k5bp5t0tupzwnk87tyihmn2&st=z7y9tqm9";
 
-// Canvas element (NOT a div)
+// Canvas element
 const canvas = document.getElementById("viewer");
+
+// Log canvas size for debugging
+console.log("Canvas size:", canvas.clientWidth, canvas.clientHeight);
 
 let scene, camera, renderer, controls;
 
@@ -16,7 +19,6 @@ animate();
 function init() {
   // Scene
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x222222);
 
   // Camera
   const width = canvas.clientWidth;
@@ -25,8 +27,6 @@ function init() {
   camera.position.set(0, 1, 3);
 
   // Renderer (using canvas directly)
-  console.log("Canvas size:", canvas.clientWidth, canvas.clientHeight);
-  
   renderer = new THREE.WebGLRenderer({
     canvas: canvas,
     antialias: true
@@ -48,7 +48,7 @@ function init() {
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
 
-  // ⭐ DEBUG CUBE — proves rendering works
+  // Debug cube (proves rendering works)
   const testGeo = new THREE.BoxGeometry(1, 1, 1);
   const testMat = new THREE.MeshStandardMaterial({ color: 0xff0000 });
   const testCube = new THREE.Mesh(testGeo, testMat);
