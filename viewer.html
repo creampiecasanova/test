@@ -25,12 +25,12 @@ const camera = new THREE.PerspectiveCamera(
 );
 camera.position.set(0, 1, 3);
 
-// Renderer (transparent background)
+// Renderer (transparent)
 const renderer = new THREE.WebGLRenderer({
   antialias: true,
   alpha: true
 });
-renderer.setClearColor(0x000000, 0); // fully transparent
+renderer.setClearColor(0x000000, 0);
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
@@ -42,17 +42,17 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.05;
 
-// Load your GLB file
+// Load your GLB
 const loader = new GLTFLoader();
 loader.load(
-  "YOUR_GLB_URL_HERE",
+  "https://www.dropbox.com/scl/fi/aqor4mdyqzczq7l4wrymw/model.glb?rlkey=ui6mkl8lly6hjz1m1gzvpi21e&st=kfwy9eio&raw=1",
   (gltf) => {
     const model = gltf.scene;
     model.scale.set(1, 1, 1);
     scene.add(model);
   },
   undefined,
-  (error) => console.error(error)
+  (error) => console.error("GLB load error:", error)
 );
 
 // Animation loop
@@ -63,7 +63,7 @@ function animate() {
 }
 animate();
 
-// Resize handling
+// Resize
 window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
