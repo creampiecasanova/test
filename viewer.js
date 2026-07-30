@@ -39,6 +39,12 @@ function init() {
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
 
+  // ⭐ DEBUG CUBE — this proves the viewer is rendering
+  const testGeo = new THREE.BoxGeometry(1, 1, 1);
+  const testMat = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+  const testCube = new THREE.Mesh(testGeo, testMat);
+  scene.add(testCube);
+
   // Load model
   loadModel();
 }
