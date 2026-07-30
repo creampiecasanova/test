@@ -23,6 +23,7 @@ function init() {
 
   // Renderer
   renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setClearColor(0xff00ff, 1);   // ⭐ MAGENTA BACKGROUND TEST
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   container.appendChild(renderer.domElement);
@@ -39,7 +40,7 @@ function init() {
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
 
-  // ⭐ DEBUG CUBE — this proves the viewer is rendering
+  // ⭐ DEBUG CUBE — proves rendering works
   const testGeo = new THREE.BoxGeometry(1, 1, 1);
   const testMat = new THREE.MeshStandardMaterial({ color: 0xff0000 });
   const testCube = new THREE.Mesh(testGeo, testMat);
