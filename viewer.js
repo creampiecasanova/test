@@ -11,20 +11,23 @@ init();
 animate();
 
 function init() {
+  // Scene
   scene = new THREE.Scene();
   scene.background = new THREE.Color(0x222222);
 
+  // Camera
   const width = container.clientWidth;
   const height = container.clientHeight;
-
-  camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+  camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 5000);
   camera.position.set(0, 1, 3);
 
+  // Renderer
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   container.appendChild(renderer.domElement);
 
+  // Lights
   const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 1.2);
   scene.add(hemi);
 
@@ -32,9 +35,11 @@ function init() {
   dir.position.set(5, 10, 5);
   scene.add(dir);
 
+  // Controls
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
 
+  // Load model
   loadModel();
 }
 
@@ -46,14 +51,23 @@ function loadModel() {
       const model = gltf.scene;
       scene.add(model);
 
+      // Compute bounding box
       const box = new THREE.Box3().setFromObject(model);
-      const size = box.getSize(new THREE.Vector3()).length();
+      const size = box.getSize(new THREE.Vector3());
       const center = box.getCenter(new THREE.Vector3());
 
+      // Center model
       model.position.sub(center);
 
-      camera.position.set(0, size * 0.5, size * 1.5);
+      // Frame camera
+      const maxDim = Math.max(size.x, size.y, size.z);
+      const fov = camera.fov * (Math.PI / 180);
+      const cameraZ = Math.abs(maxDim / Math.sin(fov / 2));
+
+      camera.position.set(0, maxDim * 0.5, cameraZ);
       camera.lookAt(0, 0, 0);
+
+      controls.update();
     },
     undefined,
     (err) => console.error("Model failed to load:", err)
