@@ -2,9 +2,12 @@ import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
 import { GLTFLoader } from "https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js";
 
+// Your GLB file
 const modelURL = "https://dl.dropboxusercontent.com/scl/fi/4zdgrxhnbv79g0d787hg6/camtamiya.glb?rlkey=q1k5bp5t0tupzwnk87tyihmn2&st=z7y9tqm9";
 
-const container = document.getElementById("viewer");
+// Canvas element (NOT a div)
+const canvas = document.getElementById("viewer");
+
 let scene, camera, renderer, controls;
 
 init();
@@ -16,17 +19,20 @@ function init() {
   scene.background = new THREE.Color(0x222222);
 
   // Camera
-  const width = container.clientWidth;
-  const height = container.clientHeight;
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
   camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 5000);
   camera.position.set(0, 1, 3);
 
-  // Renderer
-  renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setClearColor(0xff00ff, 1);   // ⭐ MAGENTA BACKGROUND TEST
+  // Renderer (using canvas directly)
+  renderer = new THREE.WebGLRenderer({
+    canvas: canvas,
+    antialias: true
+  });
+
+  renderer.setClearColor(0xff00ff, 1); // ⭐ MAGENTA TEST
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  container.appendChild(renderer.domElement);
 
   // Lights
   const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 1.2);
@@ -46,7 +52,7 @@ function init() {
   const testCube = new THREE.Mesh(testGeo, testMat);
   scene.add(testCube);
 
-  // Load model
+  // Load GLB model
   loadModel();
 }
 
@@ -88,8 +94,8 @@ function animate() {
 }
 
 window.addEventListener("resize", () => {
-  const width = container.clientWidth;
-  const height = container.clientHeight;
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
   renderer.setSize(width, height);
