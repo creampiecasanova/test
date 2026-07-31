@@ -4,16 +4,43 @@
   <meta charset="utf-8">
   <title>3D Viewer</title>
   <style>
-    body { margin: 0; overflow: hidden; background: transparent; }
-    canvas { display: block; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      overflow: hidden;
+    }
+    #three-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
   </style>
 </head>
 <body>
+
+<canvas id="three-canvas"></canvas>
+
 <script type="module">
 import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
 import { GLTFLoader } from "https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js";
 
+// Canvas reference
+const canvas = document.getElementById("three-canvas");
+
+// Renderer
+const renderer = new THREE.WebGLRenderer({
+  canvas: canvas,
+  antialias: true,
+  alpha: true
+});
+renderer.setClearColor(0x000000, 0);
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+// Scene
 const scene = new THREE.Scene();
 
 // Camera
@@ -25,24 +52,15 @@ const camera = new THREE.PerspectiveCamera(
 );
 camera.position.set(0, 1, 3);
 
-// Renderer (transparent)
-const renderer = new THREE.WebGLRenderer({
-  antialias: true,
-  alpha: true
-});
-renderer.setClearColor(0x000000, 0);
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
-
 // Lighting
 scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 1.2));
 
-// Orbit Controls
+// Controls
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.05;
 
-// Load your GLB
+// GLB Loader
 const loader = new GLTFLoader();
 loader.load(
   "https://www.dropbox.com/scl/fi/aqor4mdyqzczq7l4wrymw/model.glb?rlkey=ui6mkl8lly6hjz1m1gzvpi21e&st=kfwy9eio&raw=1",
@@ -52,7 +70,7 @@ loader.load(
     scene.add(model);
   },
   undefined,
-  (error) => console.error("GLB load error:", error)
+  (err) => console.error("GLB load error:", err)
 );
 
 // Animation loop
@@ -63,12 +81,13 @@ function animate() {
 }
 animate();
 
-// Resize
+// Resize handling
 window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 </script>
+
 </body>
 </html>
